@@ -89,10 +89,10 @@ Known issues
 ---
 ### qtorrent 
 
-**Uses inotify, need to set higher if you receive the following:
+* Uses inotify, need to set higher if you receive the following:
 
-	> inotify_add_watch("/torrents") failed "No space left on device"
+> inotify_add_watch("/torrents") failed "No space left on device"
 
-**qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
+*qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
 
 Run outside of docker: `sysctl -w fs.inotify.max_user_watches=16384`
