@@ -95,4 +95,4 @@ Known issues
 
 * qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
 
-Run outside of docker: `sysctl -w fs.inotify.max_user_watches=16384`
+Run outside of docker: `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
