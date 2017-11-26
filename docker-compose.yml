@@ -13,7 +13,7 @@ services:
     ports:
       - 6881:6881
       - 6969
-      - 8080:8080
+      - 5051:8080
   pgadmin:
     build:
       context: .
@@ -24,6 +24,18 @@ services:
       -  5050:80
     volumes:
       - ./.pgadmin:/var/lib/pgadmin
+  graphql:
+    hostname: graphql
+    image: osm2pgsqlauto:graphql
+    build:
+      context: .
+      dockerfile: postgraphql.Dockerfile
+    env_file: .env.graphql
+    ports:
+      - 5052:5000
+    volumes:
+      - ./.graphql/entrypoint:/app/entrypoint
+    restart: always
   postgres:
     hostname: postgres
     image: osm2pgsqlauto:postgres
@@ -45,18 +57,6 @@ services:
       - ./data:/var/lib/postgresql/data/pgdata
       - ./config:/docker-entrypoint-initdb.d
       - ./imports:/imports
-  graphql:
-    hostname: graphql
-    image: osm2pgsqlauto:graphql
-    build:
-      context: .
-      dockerfile: postgraphql.Dockerfile
-    env_file: .env.graphql
-    ports:
-      - 5000:5000
-    volumes:
-      - ./.graphql/entrypoint:/app/entrypoint
-    restart: always
 
 volumes:
   pgadmin: null
