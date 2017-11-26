@@ -1,0 +1,62 @@
+version: '3.3'
+services:
+  qtorrent:
+    hostname: qtorrent
+    image: osm2pgsqlauto:qtorrent
+    build:
+      context: .
+      dockerfile: qtorrent.Dockerfile
+    env_file: .env.qtorrent
+    volumes:
+      - ./.qtorrent/config:/config
+      - ./imports:/imports
+    ports:
+      - 6881:6881
+      - 6969
+      - 8080:8080
+  pgadmin:
+    build:
+      context: .
+      dockerfile: pgadmin.Dockerfile
+    image: osm2pgsqlauto:pgadmin
+    env_file: .env.pgadmin
+    ports:
+      -  5050:80
+    volumes:
+      - ./.pgadmin:/var/lib/pgadmin
+  postgres:
+    hostname: postgres
+    image: osm2pgsqlauto:postgres
+    build:
+      context: .
+      dockerfile: postgres.Dockerfile
+    restart: always
+    environment:
+      AUTO_IMPORT: /imports
+      AUTO_WATCH_IMPORT: /imports/active
+      AUTO_WATCH_CONFIG: /docker-entrypoint-initdb.d
+      POSTGRES_DB: osm
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgresdatabaseforosm
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - 5433:5432
+    volumes:
+      - ./data:/var/lib/postgresql/data/pgdata
+      - ./config:/docker-entrypoint-initdb.d
+      - ./imports:/imports
+  graphql:
+    hostname: graphql
+    image: osm2pgsqlauto:graphql
+    build:
+      context: .
+      dockerfile: postgraphql.Dockerfile
+    env_file: .env.graphql
+    ports:
+      - 5000:5000
+    volumes:
+      - ./.graphql/entrypoint:/app/entrypoint
+    restart: always
+
+volumes:
+  pgadmin: null
