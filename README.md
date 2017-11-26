@@ -85,16 +85,12 @@ Usage
 ### OpenStreetMap Torrents:
 - https://archive.org/details/osmdata
 
-## Known issues
-
+Known issues
 ---
-#### qtorrent 
-	requires inotify, need to set higher if you receive the following:
-	- inotify_add_watch("/torrents") failed 
-	> "No space left on device"
-	qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
+### qtorrent 
+requires inotify, need to set higher if you receive the following:
+	> inotify_add_watch("/torrents") failed "No space left on device"
+qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
 
-	Run outside of docker:
-	```
-	sysctl -w fs.inotify.max_user_watches=16384
-	```
+Run outside of docker:
+    `sysctl -w fs.inotify.max_user_watches=16384`
