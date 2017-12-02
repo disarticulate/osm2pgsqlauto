@@ -28,7 +28,7 @@ import_planet () {
 create_planet () {
   FILE=$1
   print_cyan "**** importing planet file: $FILE"
-  /usr/bin/osm2pgsql -c -U $POSTGRES_USER -d $POSTGRES_DB --slim $FILE
+  /usr/bin/osm2pgsql -c --number-processes 6 -C 10000 --flat-nodes $AUTO_WATCH_IMPORT/../downloading/cache -U $POSTGRES_USER -d $POSTGRES_DB --slim $FILE
 }
 process () {
   PATH=$1
@@ -39,7 +39,7 @@ process () {
     print_red "*** Found changeset $FILE_NAME"
     import_planet $FILE
   fi
-  if [[ $FILE_NAME = planet-*.osm* ]]; then
+  if [[ $FILE_NAME = planet-*.osm* ]] || [[ $FILE_NAME = planet-*.pbf ]]; then
     print_red "*** Found planet $FILE_NAME"
     create_planet $FILE
   fi

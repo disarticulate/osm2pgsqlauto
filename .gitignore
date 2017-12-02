@@ -1,6 +1,7 @@
 #project data after init
 data/
 downloads/
+client/node_modules/
 imports/archive/
 imports/active/
 imports/downloading/

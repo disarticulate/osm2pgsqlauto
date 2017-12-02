@@ -1,5 +1,25 @@
 version: '3.3'
 services:
+  client:
+    hostname: client
+    image: osm2pgsqlauto:client
+    build:
+      context: ./client
+      dockerfile: client.Dockerfile
+    volumes:
+      - ./client:/app
+    ports:
+      - 5049:4000
+  pgadmin:
+    build:
+      context: .
+      dockerfile: pgadmin.Dockerfile
+    image: osm2pgsqlauto:pgadmin
+    env_file: .env.pgadmin
+    ports:
+      -  5050:80
+    volumes:
+      - ./.pgadmin:/var/lib/pgadmin
   qtorrent:
     hostname: qtorrent
     image: osm2pgsqlauto:qtorrent
@@ -14,16 +34,6 @@ services:
       - 6881:6881
       - 6969
       - 5051:8080
-  pgadmin:
-    build:
-      context: .
-      dockerfile: pgadmin.Dockerfile
-    image: osm2pgsqlauto:pgadmin
-    env_file: .env.pgadmin
-    ports:
-      -  5050:80
-    volumes:
-      - ./.pgadmin:/var/lib/pgadmin
   graphql:
     hostname: graphql
     image: osm2pgsqlauto:graphql
@@ -60,3 +70,4 @@ services:
 
 volumes:
   pgadmin: null
+  client_modules: null
