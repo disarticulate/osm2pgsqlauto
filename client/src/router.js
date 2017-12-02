@@ -27,10 +27,11 @@ export default new VueRouter({
   routes: [
     {
       path: '/',
-      component: load('Hello'),
+      component: load('main'),
       children: [
         {
-          path: 'grid',
+          name: 'primary',
+          path: '/',
           component: load('grid')
         }
       ]

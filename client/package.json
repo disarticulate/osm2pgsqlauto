@@ -18,6 +18,8 @@
     "leaflet": "^1.2.0",
     "quasar-extras": "0.0.8",
     "quasar-framework": "^0.14.4",
+    "simple-rate-limiter": "^0.2.3",
+    "uuid": "^3.1.0",
     "vue": "^2.5.0",
     "vue-graphql": "^0.1.0",
     "vue-router": "^3.0.1",

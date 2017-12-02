@@ -13,10 +13,12 @@ require(`quasar/dist/quasar.${__THEME}.css`)
 import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
-
+import { dexiePlugin } from './plugins/dexie'
+import store from './store'
 Vue.config.productionTip = false
 
 Vue.use(Quasar) // Install Quasar Framework
+Vue.use(dexiePlugin)
 
 if (__THEME === 'mat') {
   require('quasar-extras/roboto-font')
@@ -30,6 +32,7 @@ Quasar.start(() => {
   /* eslint-disable no-new */
   new Vue({
     el: '#q-app',
+    store,
     router,
     render: h => h(require('./App').default)
   })

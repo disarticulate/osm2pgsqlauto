@@ -1,22 +1,23 @@
 <template>
   <div class="layout-padding row justify-center">
-    <container :layout.sync="layout">
-      <box
-        class="box"
-        box-id="box-a">
-        <q-toolbar>
-          <q-toolbar-title>
-            Toolbar
-          </q-toolbar-title>
-          <q-btn flat>
-            <q-icon name="fa-window-close" />
-          </q-btn>
-        </q-toolbar>
-        <h1>Box 1</h1>  
-      </box>
-      <box box-id="box-b">
-        <h1>Box 2</h1>
-      </box>
+    <container :layout.sync="layouts">
+      <template v-for="(item, index) in layouts">
+        <box 
+          class="box"
+          v-on:dragEnd="dragEnd = true"
+          v-on:resizeEnd="resizeEnd = true"
+          :box-id="item.id">
+          <q-toolbar>
+            <q-toolbar-title>
+              {{item.properties.title}}
+            </q-toolbar-title>
+            <q-btn flat @click="remove(item.id)">
+              <q-icon name="fa-window-close" />
+            </q-btn>
+          </q-toolbar>
+          <p>{{item.id}}</p>
+        </box>
+      </template>   
     </container>
   </div>
 </template>
@@ -29,14 +30,18 @@
 </style>
 
 <script>
-// import Container and Box components
 import { Container, Box } from '@dattn/dnd-grid'
-import { QToolbar, QBtn, QToolbarTitle, QIcon } from 'quasar'
-// minimal css for the components to work properly
+import { QToolbar,
+  QBtn,
+  QToolbarTitle,
+  QIcon
+} from 'quasar'
+import { mapGetters, mapActions, mapMutations } from 'vuex'
+
 export default {
   components: {
-    'box': Box,
-    'container': Container,
+    Box,
+    Container,
     QToolbar,
     QToolbarTitle,
     QBtn,
@@ -44,30 +49,56 @@ export default {
   },
   data () {
     return {
-      layout: [
-        {
-          id: 'box-a',
-          hidden: false,
-          pinned: false,
-          position: {
-            x: 0,
-            y: 0,
-            w: 4,
-            h: 2
-          }
-        },
-        {
-          id: 'box-b',
-          hidden: false,
-          pinned: false,
-          position: {
-            x: 4,
-            y: 0,
-            w: 2,
-            h: 1
-          }
+      dragEnd: false,
+      resizeEnd: false,
+      table: this.$db.layouts
+    }
+  },
+  mounted () {
+    console.log('grid', this.table)
+    this.table.each((item, cursor) => {
+      if (item.active) this.addToLayouts(item.box)
+    })
+  },
+  computed: {
+    ...mapGetters([
+      'getLayouts'
+    ]),
+    layouts: {
+      get () {
+        return this.getLayouts
+      },
+      set (layouts) {
+        if (this.dragEnd || this.resizeEnd) {
+          layouts.forEach(box => {
+            this.save(box)
+          })
+          this.dragEnd = false
+          this.resizeEnd = false
         }
-      ]
+      }
+    }
+  },
+  methods: {
+    ...mapActions([
+      'saveBox',
+      'removeBox'
+    ]),
+    ...mapMutations([
+      'addToLayouts',
+      'updateLayouts',
+      'removeFromLayouts'
+    ]),
+    save (box) {
+      return this.saveBox({ box, table: this.table })
+    },
+    remove (id) {
+      this.layouts.some(box => {
+        if (box.id === id) {
+          this.removeBox({ box, table: this.table })
+          return true
+        }
+      })
     }
   }
 }
