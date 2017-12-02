@@ -29,8 +29,14 @@
         <q-list-header>Query Manager</q-list-header>
         <q-item @click="newBox()">
           <q-item-side icon="fa-plus-square" />
-          <q-item-main label="Window" sublabel="Open new query window" />
+          <q-item-main label="Add Window" sublabel="Open new query window" />
         </q-item>
+        <q-collapsible label="Windows">
+          <q-item v-for="(item,index) in layouts">
+            <q-item-side icon="fa-window-maximize" />
+            <q-item-main label="Window" :sublabel="item.properties.title" />
+          </q-item>
+        </q-collapsible>
       </q-list>
     </div>
 
@@ -45,6 +51,7 @@
 
 <script>
 import {
+  QCollapsible,
   QLayout,
   QToolbar,
   QToolbarTitle,
@@ -64,6 +71,7 @@ import {
 export default {
   name: 'index',
   components: {
+    QCollapsible,
     QLayout,
     QToolbar,
     QToolbarTitle,
@@ -82,6 +90,11 @@ export default {
     }
   },
   computed: {
+    layouts: {
+      get () {
+        return this.$store.getters.getLayouts
+      }
+    }
   },
   methods: {
     ...mapMutations([
@@ -95,7 +108,7 @@ export default {
       vm.createBox({
         title: 'new Box',
         active: true
-      }).then(box => vm.addToLayouts(box))
+      })
     }
   },
   mounted () {

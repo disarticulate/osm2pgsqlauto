@@ -21,28 +21,22 @@ export const removeBox = ({ commit }, { box, table }) => {
       .catch(err => reject(err))
   })
 }
-export const loadBox = (store, key) => {
-  return new Promise((resolve, reject) => {
-    store._vm.$db.layouts
-      .get({ key })
-      .then(result => resolve(result))
-      .catch(err => reject(err))
-  })
-}
 
-export const createBox = (store, properties) => {
+export const createBox = ({ commit }, properties) => {
+  let box = {
+    properties,
+    id: 'box-' + require('uuid/v4')(),
+    hidden: false,
+    pinned: false,
+    position: {
+      x: 0,
+      y: 0,
+      w: 4,
+      h: 2
+    }
+  }
+  commit('addToLayouts', box)
   return new Promise((resolve, reject) => {
-    resolve({
-      properties,
-      id: 'box-' + require('uuid/v4')(),
-      hidden: false,
-      pinned: false,
-      position: {
-        x: 0,
-        y: 0,
-        w: 4,
-        h: 2
-      }
-    })
+    resolve(box)
   })
 }

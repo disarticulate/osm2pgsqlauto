@@ -4,11 +4,12 @@
       <template v-for="(item, index) in layouts">
         <box 
           class="box"
+          drag-selector=".drag"
           v-on:dragEnd="dragEnd = true"
           v-on:resizeEnd="resizeEnd = true"
           :box-id="item.id">
-          <q-toolbar>
-            <q-toolbar-title>
+          <q-toolbar class="drag">
+            <q-toolbar-title class="drag">
               {{item.properties.title}}
             </q-toolbar-title>
             <q-btn flat @click="remove(item.id)">
@@ -22,7 +23,7 @@
   </div>
 </template>
 
-<style>
+<style scoped>
   .box {
     border-style: solid;
     border-width: 1px;
@@ -36,7 +37,11 @@ import { QToolbar,
   QToolbarTitle,
   QIcon
 } from 'quasar'
-import { mapGetters, mapActions, mapMutations } from 'vuex'
+import {
+  mapGetters,
+  mapActions,
+  mapMutations
+} from 'vuex'
 
 export default {
   components: {
@@ -55,7 +60,6 @@ export default {
     }
   },
   mounted () {
-    console.log('grid', this.table)
     this.table.each((item, cursor) => {
       if (item.active) this.addToLayouts(item.box)
     })
