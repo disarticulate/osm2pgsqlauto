@@ -2,8 +2,11 @@ Preamble
 ===
 osm2postgresauto is an *** Experimental *** development environment that combines the following technologies:
 	- Postgres w/PostGIS for database backend & spatial data management
+	
 	- qBittorrent for massive data transfer/automation
+	
 	- pgAdmin for database management
+	
 	- graphql via Postgraphql (postgraphql/postgraphql)
 
 The hope is to allow rapid development of a graphql api and management engine for postgres & postgis.
@@ -85,16 +88,14 @@ Usage
 ### OpenStreetMap Torrents:
 - https://archive.org/details/osmdata
 
-## Known issues
-
+Known issues
 ---
-#### qtorrent 
-	requires inotify, need to set higher if you receive the following:
-	- inotify_add_watch("/torrents") failed 
-	> "No space left on device"
-	qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
+### qtorrent 
 
-	Run outside of docker:
-	```
-	sysctl -w fs.inotify.max_user_watches=16384
-	```
+* Uses inotify, need to set higher if you receive the following:
+
+> inotify_add_watch("/torrents") failed "No space left on device"
+
+* qtorrent (or elsewhere), it means your kernel (outside of docker) requires more inotify watchers.
+
+Run outside of docker: `echo fs.inotify.max_user_watches=524288 | sudo tee -a /etc/sysctl.conf && sudo sysctl -p`
