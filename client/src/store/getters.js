@@ -1,8 +1,8 @@
-export const getLayouts = (state) => {
-  return state.layouts
+export const getBoxes = (state) => {
+  return state.boxes
 }
-export const getLayoutsById = (state) => {
-  return id => state.layouts.filter(item => {
+export const getBoxesById = (state) => {
+  return id => state.boxes.filter(item => {
     return item.id !== id
   })
 }

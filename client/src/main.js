@@ -12,13 +12,17 @@ require(`quasar/dist/quasar.${__THEME}.css`)
 
 import Vue from 'vue'
 import Quasar from 'quasar'
+import Inview from 'vueinview'
+
 import router from './router'
 import { dexiePlugin } from './plugins/dexie'
 import store from './store'
+
 Vue.config.productionTip = false
 
 Vue.use(Quasar) // Install Quasar Framework
 Vue.use(dexiePlugin)
+Vue.use(Inview)
 
 if (__THEME === 'mat') {
   require('quasar-extras/roboto-font')

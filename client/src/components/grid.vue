@@ -1,19 +1,25 @@
 <template>
   <div class="layout-padding row justify-center">
-    <container :layout.sync="layouts">
-      <template v-for="(item, index) in layouts">
-        <box 
+    <container 
+      :layout.sync="boxes">
+      <template
+        v-for="(item, index) in boxes">
+        <box
           class="box"
+          v-inview:enter="() => visible(item)"
           drag-selector=".drag"
           v-on:dragEnd="dragEnd = true"
           v-on:resizeEnd="resizeEnd = true"
           :box-id="item.id">
           <q-toolbar class="drag bg-negative">
+            <q-icon
+              class="drag"
+              name="fa-arrows"/>
             <q-toolbar-title 
               class="drag">
-              <q-input 
-                class="text-primary"
-                v-model="item.properties.title" />
+              <q-input
+                v-model="item.properties.title"
+                readonly/>
             </q-toolbar-title>
             <q-btn
               flat
@@ -23,8 +29,7 @@
             </q-btn>
           </q-toolbar>
           <component
-            :is="item.properties.component"
-            :socket-id="item.properties">
+            :is="item.properties.component">
           </component>
         </box>
       </template>   
@@ -46,16 +51,12 @@ import {
 } from '@dattn/dnd-grid'
 import {
   QInput,
-  QSelect,
   QList,
-  QItem,
-  QPopover,
   QItemSide,
   QToolbar,
   QBtn,
   QToolbarTitle,
-  QIcon,
-  QItemMain
+  QIcon
 } from 'quasar'
 import {
   mapGetters,
@@ -67,11 +68,7 @@ import nodeQueryInput from './nodes/queryInput'
 export default {
   components: {
     QInput,
-    QSelect,
-    QItemMain,
     QList,
-    QItem,
-    QPopover,
     QItemSide,
     nodeTextOutput,
     nodeQueryInput,
@@ -84,6 +81,7 @@ export default {
   },
   data () {
     return {
+      isMounted: false,
       dragEnd: false,
       resizeEnd: false,
       table: null,
@@ -93,20 +91,30 @@ export default {
   mounted () {
     this.table = this.$db.layouts
     this.table.each((item, cursor) => {
-      if (item.active) this.addToLayouts(item.box)
-    })
+      if (item.active) {
+        this.addToBoxes(item.box)
+        this.createSocket(item.box)
+      }
+    }).then(() => (this.isMounted = true))
+  },
+  watch: {
+    getBoxes (boxes) {
+      if (this.isMounted) {
+        boxes.map(box => this.save(box))
+      }
+    }
   },
   computed: {
     ...mapGetters([
-      'getLayouts'
+      'getBoxes'
     ]),
-    layouts: {
+    boxes: {
       get () {
-        return this.getLayouts
+        return this.getBoxes
       },
-      set (layouts) {
+      set (boxes) {
         if (this.dragEnd || this.resizeEnd) {
-          layouts.forEach(box => this.save(box))
+          boxes.forEach(box => this.save(box))
           this.dragEnd = false
           this.resizeEnd = false
         }
@@ -116,27 +124,27 @@ export default {
   methods: {
     ...mapActions([
       'saveBox',
-      'removeBox'
+      'removeBox',
+      'createSocket'
     ]),
     ...mapMutations([
-      'addToLayouts',
-      'updateLayouts',
-      'removeFromLayouts'
+      'addToBoxes',
+      'updateBoxes',
+      'removeFromBoxess'
     ]),
     setLinks (box) {
       console.log(box)
     },
-    getLayoutsByType (type) {
-      return this.$store.getters.getLayoutsByType(type)
-    },
-    getLayoutsSelectionsByType (type) {
-      return this.$store.getters.getLayoutsSelectionsByType(type)
+    visible (box) {
+      console.log('visible', box)
+      // this.addToLayouts(box)
+      // this.saveBox(box)
     },
     save (box) {
       return this.saveBox({ box, table: this.table })
     },
     remove (id) {
-      this.layouts.some(box => {
+      this.boxes.some(box => {
         if (box.id === id) {
           this.removeBox({ box, table: this.table })
           return true

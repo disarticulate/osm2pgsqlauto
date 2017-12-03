@@ -1,12 +1,14 @@
-export const addToLayouts = (state, box) => {
-  state.layouts.push(box)
+export const addToBoxes = (state, box) => {
+  if (!state.boxes.some(item => (item.id === box.id))) {
+    state.boxes.push(box)
+  }
 }
-export const removeFromLayouts = (state, box) => {
-  let index = state.layouts.indexOf(box)
-  if (index !== -1) state.layouts.splice(index, 1)
+export const removeFromBoxes = (state, box) => {
+  let index = state.boxes.indexOf(box)
+  if (index !== -1) state.boxes.splice(index, 1)
 }
-export const updateLayouts = (state, box) => {
-  state.layouts.some(oldBox => {
+export const updateBoxes = (state, box) => {
+  state.boxes.some(oldBox => {
     if (oldBox.id === box.id) {
       Object.assign(oldBox, box)
       return true

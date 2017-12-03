@@ -2,8 +2,7 @@
   <q-layout
     ref="layout"
     view="lHh Lpr fff"
-    :left-class="{'bg-grey-2': true}"
-  >
+    :left-class="{'bg-grey-2': true}">
     <q-toolbar slot="header" class="glossy">
       <q-btn
         flat
@@ -42,7 +41,7 @@
           </q-item-side>
         </q-item>
         <q-collapsible label="Windows">
-          <q-item v-for="(item, index) in layouts">
+          <q-item v-for="(item, index) in boxes">
             <q-item-side icon="fa-window-maximize" />
             <q-item-main 
               :label="item.component.text"
@@ -51,12 +50,6 @@
         </q-collapsible>
       </q-list>
     </div>
-
-    <!--
-      Replace following <div> with
-      <router-view /> component
-      if using subRoutes
-    -->
     <router-view/>
   </q-layout>
 </template>
@@ -107,8 +100,8 @@ export default {
     }
   },
   computed: {
-    layouts () {
-      return this.$store.getters.getLayouts
+    boxes () {
+      return this.$store.getters.getBoxes
     },
     nodes () {
       return this.$store.getters.getNodes
@@ -116,10 +109,11 @@ export default {
   },
   methods: {
     ...mapMutations([
-      'addToLayouts'
+      'addToBoxes'
     ]),
     ...mapActions([
-      'createBox'
+      'createBox',
+      'createSocket'
     ]),
     newBox (component) {
       let vm = this

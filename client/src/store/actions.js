@@ -1,5 +1,5 @@
 export const saveBox = ({ commit }, { box, table }) => {
-  commit('updateLayouts', box)
+  commit('updateBoxes', box)
   return new Promise((resolve, reject) => {
     table.put({
       key: box.id,
@@ -10,7 +10,7 @@ export const saveBox = ({ commit }, { box, table }) => {
   })
 }
 export const removeBox = ({ commit }, { box, table }) => {
-  commit('removeFromLayouts', box)
+  commit('removeFromBoxes', box)
   return new Promise((resolve, reject) => {
     box.properties.active = false
     table.put({
@@ -21,8 +21,7 @@ export const removeBox = ({ commit }, { box, table }) => {
       .catch(err => reject(err))
   })
 }
-
-export const createBox = ({ commit }, properties) => {
+export const createBox = ({ commit, dispatch }, properties) => {
   let box = {
     properties,
     component: properties.component,
@@ -36,16 +35,16 @@ export const createBox = ({ commit }, properties) => {
       h: 2
     }
   }
-  commit('addToLayouts', box)
+  commit('addToBoxes', box)
   return new Promise((resolve, reject) => {
     resolve(box)
   })
 }
 
-export const createSocket = ({ commit }, node) => {
+export const createSocket = ({ commit }, box) => {
   let socket = {
     id: require('uuid/v4')(),
-    self: node.id,
+    self: box.id,
     nodes: [],
     output: {},
     input: {}

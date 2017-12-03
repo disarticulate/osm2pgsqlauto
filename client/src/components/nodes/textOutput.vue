@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{output}}
+    {{socket.output}}
   </div>
 </template>
 
@@ -8,13 +8,13 @@
 export default {
   name: 'textOutput',
   props: {
-    input: {
-      type: Object
+    socketId: {
+      type: String
     }
   },
   computed: {
-    output () {
-      return this.input.output
+    socket () {
+      return this.$store.getters.getSocketsById(this.socketId)
     }
   },
   data () {
