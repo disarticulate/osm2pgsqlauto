@@ -41,3 +41,17 @@ export const createBox = ({ commit }, properties) => {
     resolve(box)
   })
 }
+
+export const createSocket = ({ commit }, node) => {
+  let socket = {
+    id: require('uuid/v4')(),
+    self: node.id,
+    nodes: [],
+    output: {},
+    input: {}
+  }
+  commit('addToSockets', socket)
+  return new Promise((resolve, reject) => {
+    resolve(socket)
+  })
+}

@@ -17,8 +17,8 @@ export default {
     QInput
   },
   props: {
-    input: {
-      type: Object
+    socketId: {
+      type: String
     }
   },
   mounted () {
@@ -29,6 +29,8 @@ export default {
       title: 'Query Input',
       output: ''
     }
+  },
+  methods: {
   }
 }
 </script>

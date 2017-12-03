@@ -8,30 +8,23 @@
           v-on:dragEnd="dragEnd = true"
           v-on:resizeEnd="resizeEnd = true"
           :box-id="item.id">
-          <q-toolbar class="drag">
-            <q-item-side right icon="fa-link">
-              <q-popover ref="popover">
-                <q-list link>
-                  <q-item 
-                    v-for="(linkItem, linkIndex) in getLayoutsByType(item.properties.type)">
-                    <q-item-main
-                      @click="link(linkItem.id)"
-                      :label="linkItem.properties.title"/>
-                  </q-item>
-                </q-list>
-              </q-popover>
-            </q-item-side>
-            <q-toolbar-title class="drag">
-              {{item.properties.title}}
+          <q-toolbar class="drag bg-negative">
+            <q-toolbar-title 
+              class="drag">
+              <q-input 
+                class="text-primary"
+                v-model="item.properties.title" />
             </q-toolbar-title>
-            <q-btn flat @click="remove(item.id)">
-              <q-icon name="fa-window-close" />
+            <q-btn
+              flat
+              @click="remove(item.id)">
+              <q-icon 
+                name="fa-window-close" />
             </q-btn>
           </q-toolbar>
           <component
-            ref
             :is="item.properties.component"
-            :input="item.properties">
+            :socket-id="item.properties">
           </component>
         </box>
       </template>   
@@ -52,6 +45,8 @@ import {
   Box
 } from '@dattn/dnd-grid'
 import {
+  QInput,
+  QSelect,
   QList,
   QItem,
   QPopover,
@@ -71,6 +66,8 @@ import nodeTextOutput from './nodes/textOutput'
 import nodeQueryInput from './nodes/queryInput'
 export default {
   components: {
+    QInput,
+    QSelect,
     QItemMain,
     QList,
     QItem,
@@ -89,10 +86,12 @@ export default {
     return {
       dragEnd: false,
       resizeEnd: false,
-      table: this.$db.layouts
+      table: null,
+      links: []
     }
   },
   mounted () {
+    this.table = this.$db.layouts
     this.table.each((item, cursor) => {
       if (item.active) this.addToLayouts(item.box)
     })
@@ -107,9 +106,7 @@ export default {
       },
       set (layouts) {
         if (this.dragEnd || this.resizeEnd) {
-          layouts.forEach(box => {
-            this.save(box)
-          })
+          layouts.forEach(box => this.save(box))
           this.dragEnd = false
           this.resizeEnd = false
         }
@@ -126,11 +123,14 @@ export default {
       'updateLayouts',
       'removeFromLayouts'
     ]),
-    link (box) {
+    setLinks (box) {
       console.log(box)
     },
     getLayoutsByType (type) {
       return this.$store.getters.getLayoutsByType(type)
+    },
+    getLayoutsSelectionsByType (type) {
+      return this.$store.getters.getLayoutsSelectionsByType(type)
     },
     save (box) {
       return this.saveBox({ box, table: this.table })

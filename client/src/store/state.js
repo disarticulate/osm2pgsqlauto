@@ -9,5 +9,11 @@ export default {
     name: 'node-query-input',
     text: 'Query',
     type: 'input'
+  }],
+  sockets: [{
+    id: 'test',
+    nodes: [],
+    input: {},
+    output: {}
   }]
 }

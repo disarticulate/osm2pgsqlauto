@@ -13,3 +13,18 @@ export const updateLayouts = (state, box) => {
     }
   })
 }
+export const addToSockets = (state, socket) => {
+  state.sockets.push(socket)
+}
+export const removeFromSockets = (state, socket) => {
+  let index = state.sockets.indexOf(socket)
+  if (index !== -1) state.sockets.splice(index, 1)
+}
+export const updateSockets = (state, socket) => {
+  state.sockets.some(oldSocket => {
+    if (oldSocket.id === socket.id) {
+      Object.assign(oldSocket, socket)
+      return true
+    }
+  })
+}

@@ -128,7 +128,7 @@ export default {
         type: component.type,
         component: component.name,
         active: true
-      })
+      }).then(box => vm.createSocket(box))
     }
   },
   mounted () {
