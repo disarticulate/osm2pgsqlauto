@@ -9,6 +9,18 @@
           v-on:resizeEnd="resizeEnd = true"
           :box-id="item.id">
           <q-toolbar class="drag">
+            <q-item-side right icon="fa-link">
+              <q-popover ref="popover">
+                <q-list link>
+                  <q-item 
+                    v-for="(linkItem, linkIndex) in getLayoutsByType(item.properties.type)">
+                    <q-item-main
+                      @click="link(linkItem.id)"
+                      :label="linkItem.properties.title"/>
+                  </q-item>
+                </q-list>
+              </q-popover>
+            </q-item-side>
             <q-toolbar-title class="drag">
               {{item.properties.title}}
             </q-toolbar-title>
@@ -16,7 +28,11 @@
               <q-icon name="fa-window-close" />
             </q-btn>
           </q-toolbar>
-          <p>{{item.id}}</p>
+          <component
+            ref
+            :is="item.properties.component"
+            :input="item.properties">
+          </component>
         </box>
       </template>   
     </container>
@@ -31,20 +47,37 @@
 </style>
 
 <script>
-import { Container, Box } from '@dattn/dnd-grid'
-import { QToolbar,
+import {
+  Container,
+  Box
+} from '@dattn/dnd-grid'
+import {
+  QList,
+  QItem,
+  QPopover,
+  QItemSide,
+  QToolbar,
   QBtn,
   QToolbarTitle,
-  QIcon
+  QIcon,
+  QItemMain
 } from 'quasar'
 import {
   mapGetters,
   mapActions,
   mapMutations
 } from 'vuex'
-
+import nodeTextOutput from './nodes/textOutput'
+import nodeQueryInput from './nodes/queryInput'
 export default {
   components: {
+    QItemMain,
+    QList,
+    QItem,
+    QPopover,
+    QItemSide,
+    nodeTextOutput,
+    nodeQueryInput,
     Box,
     Container,
     QToolbar,
@@ -93,6 +126,12 @@ export default {
       'updateLayouts',
       'removeFromLayouts'
     ]),
+    link (box) {
+      console.log(box)
+    },
+    getLayoutsByType (type) {
+      return this.$store.getters.getLayoutsByType(type)
+    },
     save (box) {
       return this.saveBox({ box, table: this.table })
     },
@@ -109,5 +148,5 @@ export default {
 </script>
 
 <style>
-@import '../../node_modules/@dattn/dnd-grid/dist/index.css'
+  @import '../../node_modules/@dattn/dnd-grid/dist/index.css'
 </style>

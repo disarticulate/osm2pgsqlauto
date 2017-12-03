@@ -7,8 +7,7 @@
     <q-toolbar slot="header" class="glossy">
       <q-btn
         flat
-        @click="$refs.layout.toggleLeft()"
-      >
+        @click="$refs.layout.toggleLeft()">
         <q-icon name="fa-bars" />
       </q-btn>
 
@@ -24,17 +23,30 @@
         instead of <q-item> for
         internal vue-router navigation
       -->
-
       <q-list no-border link inset-delimiter>
         <q-list-header>Query Manager</q-list-header>
-        <q-item @click="newBox()">
-          <q-item-side icon="fa-plus-square" />
-          <q-item-main label="Add Window" sublabel="Open new query window" />
+        <q-item>
+          <q-item-side icon="fa-window-maximize" />
+          <q-item-main label="Add Node" sublabel="Open new query window" />
+          <q-item-side right icon="fa-bars">
+            <q-popover ref="popover">
+              <q-list link>
+                <q-item 
+                  v-for="(item, index) in nodes">
+                  <q-item-main 
+                    :label="item.text"
+                    @click="newBox(item)"/>
+                </q-item>
+              </q-list>
+            </q-popover>
+          </q-item-side>
         </q-item>
         <q-collapsible label="Windows">
-          <q-item v-for="(item,index) in layouts">
+          <q-item v-for="(item, index) in layouts">
             <q-item-side icon="fa-window-maximize" />
-            <q-item-main label="Window" :sublabel="item.properties.title" />
+            <q-item-main 
+              :label="item.component.text"
+              :sublabel="item.properties.title" />
           </q-item>
         </q-collapsible>
       </q-list>
@@ -51,6 +63,8 @@
 
 <script>
 import {
+  QPopover,
+  QSelect,
   QCollapsible,
   QLayout,
   QToolbar,
@@ -71,6 +85,8 @@ import {
 export default {
   name: 'index',
   components: {
+    QPopover,
+    QSelect,
     QCollapsible,
     QLayout,
     QToolbar,
@@ -85,15 +101,17 @@ export default {
   },
   data () {
     return {
+      select: '',
       orienting: window.DeviceOrientationEvent && !this.$q.platform.is.desktop,
       rotating: window.DeviceMotionEvent && !this.$q.platform.is.desktop
     }
   },
   computed: {
-    layouts: {
-      get () {
-        return this.$store.getters.getLayouts
-      }
+    layouts () {
+      return this.$store.getters.getLayouts
+    },
+    nodes () {
+      return this.$store.getters.getNodes
     }
   },
   methods: {
@@ -103,10 +121,12 @@ export default {
     ...mapActions([
       'createBox'
     ]),
-    newBox (url) {
+    newBox (component) {
       let vm = this
       vm.createBox({
-        title: 'new Box',
+        title: component.text,
+        type: component.type,
+        component: component.name,
         active: true
       })
     }

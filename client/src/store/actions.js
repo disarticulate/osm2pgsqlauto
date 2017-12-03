@@ -25,6 +25,7 @@ export const removeBox = ({ commit }, { box, table }) => {
 export const createBox = ({ commit }, properties) => {
   let box = {
     properties,
+    component: properties.component,
     id: 'box-' + require('uuid/v4')(),
     hidden: false,
     pinned: false,
