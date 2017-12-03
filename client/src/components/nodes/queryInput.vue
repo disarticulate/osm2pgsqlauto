@@ -11,15 +11,12 @@
 import {
   QInput
 } from 'quasar'
+import nodeMixin from './nodeMixin'
 export default {
   name: 'textInput',
+  mixins: [nodeMixin],
   components: {
     QInput
-  },
-  props: {
-    socketId: {
-      type: String
-    }
   },
   mounted () {
     console.log('queryInput', this.$parent.$parent)

@@ -27,13 +27,7 @@ export const createBox = ({ commit, dispatch }, properties) => {
     component: properties.component,
     id: 'box-' + require('uuid/v4')(),
     hidden: false,
-    pinned: false,
-    position: {
-      x: 0,
-      y: 0,
-      w: 4,
-      h: 2
-    }
+    pinned: false
   }
   commit('addToBoxes', box)
   return new Promise((resolve, reject) => {

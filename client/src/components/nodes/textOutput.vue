@@ -1,22 +1,18 @@
 <template>
-  <div>
-    {{socket.output}}
+  <div> 
+    <template v-for="(socket, index) in sockets">
+      <div v-if="'query' in socket.output">
+        {{socket.output.query}}
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
+import nodeMixin from './nodeMixin'
 export default {
   name: 'textOutput',
-  props: {
-    socketId: {
-      type: String
-    }
-  },
-  computed: {
-    socket () {
-      return this.$store.getters.getSocketsById(this.socketId)
-    }
-  },
+  mixins: [nodeMixin],
   data () {
     return {
       title: 'Text Output'

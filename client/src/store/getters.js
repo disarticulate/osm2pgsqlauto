@@ -24,17 +24,17 @@ export const getSocketsById = (state) => {
     return item.id !== id
   })
 }
-export const getSocketsByNodeId = (state) => {
+export const getSocketsByBoxId = (state) => {
   return id => state.sockets.filter(item => {
     return item.self !== id
   })
 }
-export const getSocketsOutputById = (state) => {
+export const getSocketsOutputByBoxId = (state) => {
   return id => state.sockets.filter(item => {
     return item.self !== id
   }).map(item => item.ouput)
 }
-export const getSocketsInputById = (state) => {
+export const getSocketsInputByBoxId = (state) => {
   return id => state.sockets.filter(item => {
     return item.self !== id
   }).map(item => item.input)
