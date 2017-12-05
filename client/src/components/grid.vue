@@ -3,12 +3,22 @@
     <container
       ref="container"
       :layout.sync="boxes">
+
       <template
         v-for="(box, index) in boxes">
-        <node-box
+        <box
+          class="box shadow-8"
           v-bind:key="box.id"
-          :box="box">
-        </node-box>
+          v-inview:enter="() => visible(box)"
+          drag-selector=".drag"
+          v-on:dragEnd="dragEnd = true"
+          v-on:resizeEnd="resizeEnd = true"
+          :box-id="box.id">
+          <node-box
+            v-bind:key="box.id"
+            :box="box">
+          </node-box>
+        </box>
       </template>   
     </container>
   </div>
@@ -18,12 +28,14 @@
   .box {
     border-style: solid;
     border-width: 1px;
+    padding-bottom:0.1em;
   }
 </style>
 
 <script>
   import {
-    Container
+    Container,
+    Box
   } from '@dattn/dnd-grid'
 
   import {
@@ -39,7 +51,8 @@
     components: {
       nodeSocket,
       nodeBox,
-      Container
+      Container,
+      Box
     },
     data () {
       return {
@@ -93,6 +106,11 @@
       ]),
       save (box) {
         return this.saveBox({ box, table: this.table })
+      },
+      visible (box) {
+        console.log('visible', box)
+        // this.addToLayouts(box)
+        // this.saveBox(box)
       }
     }
   }

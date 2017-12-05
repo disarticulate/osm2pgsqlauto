@@ -1,13 +1,5 @@
 <template>
-  <box
-    class="box"
-    ref="box"
-    v-inview:enter="() => visible(box)"
-    drag-selector=".drag"
-    v-on:dragEnd="$parent.dragEnd = true"
-    v-on:resizeEnd="$parent.resizeEnd = true"
-    :container="container"
-    :box-id="box.id">
+  <div>
     <q-toolbar class="drag bg-negative">
       <q-icon
         class="drag"
@@ -22,7 +14,7 @@
         flat
         @click="removeFromBoxes(box)">
         <q-icon 
-        name="fa-window-close"/>
+          name="fa-window-close"/>
       </q-btn>
     </q-toolbar>
     <component
@@ -34,7 +26,7 @@
       v-for="(socketItem, socketIndex) in getSocketsByBoxId(box.id)"
       :socket-id="socketItem.id">
     </node-socket>
-  </box>
+  </div>
 </template>
 <style scoped>
   .box {
@@ -44,10 +36,6 @@
   }
 </style>
 <script>
-  import {
-    Box
-  } from '@dattn/dnd-grid'
-
   import nodeTextOutput from './nodes/textOutput'
   import nodeQueryInput from './nodes/queryInput'
   import nodeSocket from './socket'
@@ -70,13 +58,9 @@
     props: {
       box: {
         type: Object
-      },
-      container: {
-        type: Object
       }
     },
     components: {
-      Box,
       nodeSocket,
       nodeQueryInput,
       nodeTextOutput,
@@ -97,12 +81,7 @@
     methods: {
       ...mapMutations([
         'removeFromBoxes'
-      ]),
-      visible (box) {
-        console.log('visible', box)
-        // this.addToLayouts(box)
-        // this.saveBox(box)
-      }
+      ])
     }
   }
 </script>

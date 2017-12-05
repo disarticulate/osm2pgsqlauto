@@ -1,11 +1,14 @@
 <template>
-  <q-input
-    v-model="output"
-    type="textarea"
-    float-label="Textarea"
-    :max-height="100"
-    :min-rows="6"
-  />
+  <div>
+    <q-input
+      v-for="(item, index) in query"
+      v-bind:key="index"
+      type="textarea"
+      float-label="Textarea"
+      :max-height="100"
+      :min-rows="6"
+    />
+  </div>
 </template>
 <script>
 import {
@@ -23,11 +26,18 @@ export default {
   },
   data () {
     return {
-      title: 'Query Input',
-      output: ''
+      title: 'Query Input'
     }
   },
-  methods: {
+  computed: {
+    query: {
+      get () {
+        this.read('query')
+      },
+      set (val) {
+        console.log('write', this.write(val, 'query'))
+      }
+    }
   }
 }
 </script>

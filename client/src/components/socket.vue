@@ -1,7 +1,11 @@
 <template>
   <div class="absolute-bottom-right">
     <template v-for="(socket, index) in sockets">
-      <span class="shadow-8 token">{{socket.id}}</span>
+      <div
+        v-bind:key="socket.id"
+        class="shadow-8 token">
+          {{socket.id}}
+      </div>
     </template>
   </div>
 </template>
