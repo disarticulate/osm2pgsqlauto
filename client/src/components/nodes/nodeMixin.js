@@ -1,25 +1,25 @@
+import { mapGetters, mapMutations } from 'vuex'
 export default {
   props: {
-    boxId: {
-      type: String
+    box: {
+      type: Object
     }
   },
+  mounted () {
+    console.log(this)
+    this.socket = this.getSocketsByBoxId(this.box.id)
+  },
   computed: {
+    ...mapGetters([
+      'getSocketsByBoxId'
+    ]),
     sockets () {
-      return this.$store.getters.getSocketsByBoxId(this.boxId)
+      return this.$store.getters.getSocketsByBoxId(this.box.id)
     }
   },
   methods: {
-    read (property) {
-      return this.sockets.map(socket => {
-        if (property in socket.input) return socket.input[property]
-      })
-    },
-    write (value, property) {
-      return this.sockets.map(socket => {
-        socket.output[property] = value
-        return socket.output
-      })
-    }
+    ...mapMutations([
+      'updateSockets'
+    ])
   }
 }

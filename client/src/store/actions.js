@@ -21,13 +21,21 @@ export const removeBox = ({ commit }, { box, table }) => {
       .catch(err => reject(err))
   })
 }
-export const createBox = ({ commit, dispatch }, properties) => {
+export const createBox = ({ commit, getters, dispatch }, properties) => {
+  console.log(getters.getBoxAtHeightEdge)
+  let { y, h } = getters.getBoxAtHeightEdge.position
   let box = {
     properties,
     component: properties.component,
     id: 'box-' + require('uuid/v4')(),
     hidden: false,
-    pinned: false
+    pinned: false,
+    position: {
+      x: 0,
+      y: y + h,
+      w: 4,
+      h: 2
+    }
   }
   commit('addToBoxes', box)
   return new Promise((resolve, reject) => {

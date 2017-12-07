@@ -1,8 +1,7 @@
 <template>
   <div>
     <q-input
-      v-for="(item, index) in query"
-      v-bind:key="index"
+      v-model="input"
       type="textarea"
       float-label="Textarea"
       :max-height="100"
@@ -14,6 +13,7 @@
 import {
   QInput
 } from 'quasar'
+
 import nodeMixin from './nodeMixin'
 export default {
   name: 'textInput',
@@ -21,22 +21,20 @@ export default {
   components: {
     QInput
   },
-  mounted () {
-    console.log('queryInput', this.$parent.$parent)
-  },
   data () {
     return {
-      title: 'Query Input'
+      title: 'Query Input',
+      input: '',
+      socket: null
     }
   },
-  computed: {
-    query: {
-      get () {
-        this.read('query')
-      },
-      set (val) {
-        console.log('write', this.write(val, 'query'))
-      }
+  watch: {
+    input (newVal, oldVal) {
+      console.log(newVal)
+      this.socket.forEach(socket => {
+        socket.input[this.$parent.box.id] = newVal
+        this.updateSockets(socket)
+      })
     }
   }
 }

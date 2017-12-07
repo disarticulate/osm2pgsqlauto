@@ -18,9 +18,23 @@
         type: String
       }
     },
+    data () {
+      return {
+        input: {}
+      }
+    },
     computed: {
       sockets () {
         return this.$store.getters.getSocketsById(this.socketId)
+      }
+    },
+    mounted () {
+      this.$on(this.socketId, this.handleInput)
+    },
+    methods: {
+      handleInput (input) {
+        console.warn('socket', `${this.socketId}`, input)
+        Object.assign(this.input, input)
       }
     }
   }

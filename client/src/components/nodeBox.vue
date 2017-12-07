@@ -12,13 +12,13 @@
       </q-toolbar-title>
       <q-btn
         flat
-        @click="removeFromBoxes(box)">
+        @click="remove(box)">
         <q-icon 
           name="fa-window-close"/>
       </q-btn>
     </q-toolbar>
     <component
-      :box-id="box.id"
+      :box="box"
       :is="box.properties.component">
     </component>
     <node-socket
@@ -41,8 +41,9 @@
   import nodeSocket from './socket'
   
   import {
-    mapGetters,
-    mapMutations
+    mapMutations,
+    mapActions,
+    mapGetters
   } from 'vuex'
   
   import {
@@ -70,8 +71,13 @@
       QIcon,
       QInput
     },
+    data () {
+      return {
+        table: null
+      }
+    },
     mounted () {
-      console.log(this.container)
+      this.table = this.$db.layouts
     },
     computed: {
       ...mapGetters([
@@ -80,8 +86,14 @@
     },
     methods: {
       ...mapMutations([
-        'removeFromBoxes'
-      ])
+
+      ]),
+      ...mapActions([
+        'removeBox'
+      ]),
+      remove (box) {
+        this.removeBox({ box, table: this.table })
+      }
     }
   }
 </script>
