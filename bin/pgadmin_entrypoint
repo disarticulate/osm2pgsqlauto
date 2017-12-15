@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+chown -R apache:apache /var/lib/pgadmin
+
+########################################################################
+#
+# pgAdmin 4 - PostgreSQL Tools
+#
+# Copyright (C) 2013 - 2017, The pgAdmin Development Team
+# This software is released under the PostgreSQL Licence
+#
+#########################################################################
+
+export PGADMIN_SETUP_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+export PGADMIN_SETUP_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+
+j2 /templates/pgadmin4.conf.j2 > /etc/httpd/conf.d/pgadmin4.conf
+
+LOCKFILE=/run/httpd/httpd.pid
+
+# Previous apache should execute successfully:
+
+[ -f $LOCKFILE ] && exit 0
+
+# Upon exit, remove lockfile.
+
+trap "{ rm -f $LOCKFILE ; exit 255; }" EXIT
+
+/usr/sbin/httpd -D FOREGROUND

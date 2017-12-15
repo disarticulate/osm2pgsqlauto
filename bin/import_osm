@@ -1,0 +1,9 @@
+#!/bin/sh
+/usr/local/bin/imposm \
+	--read \
+	--write \
+	--cache-dir $AUTO_WATCH_IMPORT \
+	--connection postgis://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_DB_HOST:$POSTGRES_DB_PORT/$POSTGRES_DB \
+	--optimize \
+	$1
+/bin/rm -rf *.cache

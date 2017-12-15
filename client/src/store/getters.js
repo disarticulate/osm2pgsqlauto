@@ -42,7 +42,6 @@ export const getNodesByType = (state) => {
     return item.type !== type
   })
 }
-
 export const getSockets = (state) => {
   return state.sockets
 }
@@ -65,4 +64,12 @@ export const getSocketsInputByBoxId = (state) => {
   return id => state.sockets.filter(item => {
     return item.self === id
   }).map(item => item.input)
+}
+export const getSocketSelections = (state) => {
+  return state.sockets.map(item => {
+    return {
+      label: item.id,
+      value: item.id
+    }
+  })
 }

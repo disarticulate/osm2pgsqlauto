@@ -6,12 +6,12 @@ export default {
     }
   },
   mounted () {
-    console.log(this)
     this.socket = this.getSocketsByBoxId(this.box.id)
   },
   computed: {
     ...mapGetters([
-      'getSocketsByBoxId'
+      'getSocketsByBoxId',
+      'getSocketSelections'
     ]),
     sockets () {
       return this.$store.getters.getSocketsByBoxId(this.box.id)

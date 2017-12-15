@@ -23,12 +23,12 @@ print_red "Acces the graphql at http://localhost:5000/graphql"
 import_planet () {
   FILE=$1
   print_cyan "**** importing planet file: $FILE"
-  /usr/bin/osm2pgsql -a -U $POSTGRES_USER -d $POSTGRES_DB --slim $FILE
+  /var/lib/osm2pgsqlauto/import_osm $FILE
 }
 create_planet () {
   FILE=$1
   print_cyan "**** importing planet file: $FILE"
-  /usr/bin/osm2pgsql -c --number-processes 6 -C 10000 --flat-nodes $AUTO_WATCH_IMPORT/../downloading/cache -U $POSTGRES_USER -d $POSTGRES_DB --slim $FILE
+  /var/lib/osm2pgsqlauto/import_osm $FILE
 }
 process () {
   PATH=$1

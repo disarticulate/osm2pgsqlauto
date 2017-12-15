@@ -53,21 +53,27 @@ services:
       context: .
       dockerfile: postgres.Dockerfile
     restart: always
-    environment:
-      AUTO_IMPORT: /imports
-      AUTO_WATCH_IMPORT: /imports/active
-      AUTO_WATCH_CONFIG: /docker-entrypoint-initdb.d
-      POSTGRES_DB: osm
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgresdatabaseforosm
-      PGDATA: /var/lib/postgresql/data/pgdata
+    env_file:
+      - .env.postgres
+
     ports:
       - 5433:5432
     volumes:
       - ./data:/var/lib/postgresql/data/pgdata
       - ./config:/docker-entrypoint-initdb.d
+  imposm:
+    hostname: imposm
+    image: osm2pgsqlauto:imposm
+    build:
+      context: .
+      dockerfile: imposm.Dockerfile
+    env_file:
+      - .env.postgres
+      - .env.imposm
+    ports:
+      - 5433
+    volumes:
       - ./imports:/imports
-
 volumes:
   pgadmin: null
   client_modules: null

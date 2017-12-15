@@ -1,0 +1,4 @@
+#!/bin/sh
+
+/var/lib/osm2pgsqlauto/postgres_wait.sh
+/var/lib/osm2pgsqlauto/watcher_imports.sh $AUTO_WATCH_IMPORT

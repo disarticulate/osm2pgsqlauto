@@ -1,7 +1,7 @@
 FROM mdillon/postgis
 
 RUN apt-get update && apt-get install -y osm2pgsql inotify-tools postgresql-plpython3-10
-RUN mkdir /var/log/opsm2pgsqlauto \ 
+RUN mkdir /var/log/opsm2pgsqlauto \
 	&& mkdir /var/log/osm2pgsqlauto \
 	&& mkdir -p /downloads/partial
 
@@ -19,4 +19,4 @@ RUN chown -R postgres:postgres /imports
 
 WORKDIR /var/lib/osm2pgsqlauto
 
-ENTRYPOINT /var/lib/osm2pgsqlauto/entrypoint
+ENTRYPOINT /var/lib/osm2pgsqlauto/postgres_entrypoint

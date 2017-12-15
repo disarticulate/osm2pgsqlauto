@@ -16,7 +16,7 @@ import {
 
 import nodeMixin from './nodeMixin'
 export default {
-  name: 'textInput',
+  name: 'queryInput',
   mixins: [nodeMixin],
   components: {
     QInput
@@ -30,7 +30,6 @@ export default {
   },
   watch: {
     input (newVal, oldVal) {
-      console.log(newVal)
       this.socket.forEach(socket => {
         socket.input[this.$parent.box.id] = newVal
         this.updateSockets(socket)

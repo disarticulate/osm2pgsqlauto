@@ -1,0 +1,4 @@
+#!/bin/bash
+
+/var/lib/osm2pgsqlauto/watcher_config.sh $AUTO_WATCH_CONFIG &
+/docker-entrypoint.sh postgres
